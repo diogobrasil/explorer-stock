@@ -27,7 +27,16 @@ class SessionsController {
       expiresIn
     });
 
-    response.status(201).json({ token, user });
+    response.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      maxAge: 15 * 60 * 1000
+    });
+
+    delete user.password;//deleta a senha do usuário da response. 
+    
+    response.status(201).json({ user });
   }
 }
 
